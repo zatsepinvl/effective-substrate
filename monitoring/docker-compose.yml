@@ -5,17 +5,24 @@ services:
     image: prom/prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./volumes/prometheus:/
+      - ./volumes/prometheus:/prometheus
     ports:
       - 9090:9090
+
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+      - 9091:9091
 
   grafana:
     image: grafana/grafana
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=password
+      - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
     ports:
       - 3000:3000
+    volumes:
+      - ./volumes/graphana:/var/lib/grafana
     links:
       - prometheus
 
